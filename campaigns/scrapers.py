@@ -53,31 +53,28 @@ class GoFundMeScraper(object):
 
         if paginate:
 
-            try:
-                next_page_path = html.find('a', class_='box').get('href')
-                num_projects = html.find('div', class_='numbers').get_text()
-                more_projects = True
-            except AttributeError as e:
-                more_projects = False
-                num_projects = ''
+            next_page_path = filter(lambda path: path.get_text() == 'Next', html.find_all('a', class_='box'))
+
+            if next_page_path:
+                next_page_path = next_page_path[0].get('href')
+
+            num_projects = html.find('div', class_='numbers').get_text()
 
             if 'thousands' in num_projects:
                 reasonable_limit = 20
             else:
                 reasonable_limit = 40
 
-            while more_projects and reasonable_limit >= 1:
+            while next_page_path and reasonable_limit >= 1:
                 response = requests.get(cls.base_url + next_page_path)
                 html = BeautifulSoup(response.content)
                 new_projects = html.find_all('div', class_='search_tile')
                 projects += new_projects
 
-                try:
-                    next_page_path = html.find('a', class_='box').get('href')
-                    num_projects = html.find('div', class_='numbers').get_text()
-                    more_projects = True
-                except AttributeError as e:
-                    more_projects = False
+                next_page_path = filter(lambda path: path.get_text() == 'Next', html.find_all('a', class_='box'))
+
+                if next_page_path:
+                    next_page_path = next_page_path[0].get('href')
 
                 reasonable_limit -= 1
 
@@ -103,41 +100,28 @@ class CrowdRiseScraper(object):
 
         if paginate:
 
-            try:
-                next_page_url = html.find('a', class_='page_link').get('href')
+            other_project_paths = html.find_all('a', class_='page_link')
+            next_page_url = filter(lambda path: path.get_text() == 'Next >', other_project_paths)
 
-                other_project_paths = html.find_all('a', class_='page_link')
-                other_project_paths = filter(lambda path: path.get_text() == 'Next >', other_project_paths)
-
-                if other_project_paths:
-                    more_projects = True
-                else:
-                    more_projects = False
-
-            except AttributeError as e:
-                more_projects = False
+            if next_page_url:
+                next_page_url = next_page_url[0].get('href')
 
             reasonable_limit = 40
 
-            while more_projects and reasonable_limit >= 1:
+            while next_page_url and reasonable_limit >= 1:
                 response = requests.get(next_page_url)
                 html = BeautifulSoup(response.content)
                 new_projects = html.find_all('div', class_='content clearfix ')  # TODO: This is still buggy fix meeeee
                 projects += new_projects
 
-                try:
-                    other_project_paths = html.find_all('a', class_='page_link')
-                    other_project_paths = filter(lambda path: path.get_text() == 'Next >', other_project_paths)
+                other_project_paths = html.find_all('a', class_='page_link')
+                other_project_paths = filter(lambda path: path.get_text() == 'Next >', other_project_paths)
 
-                    if other_project_paths:
-                        more_projects = True
-                        next_page_url = other_project_paths[0].get('href')
+                if other_project_paths:
+                    next_page_url = other_project_paths[0].get('href')
 
-                    else:
-                        more_projects = False
-
-                except AttributeError as e:
-                    more_projects = False
+                else:
+                    next_page_url = []
 
                 reasonable_limit -= 1
 
@@ -145,7 +129,7 @@ class CrowdRiseScraper(object):
 
         for project in projects:
             description = project.find('div', class_='searchResultsStory').get_text()
-            # print description
+
             budget_items = list(re.findall('\$\d{1,}', description))
             budget_items = map(lambda item: int(item.strip('$')), budget_items)
 
@@ -161,8 +145,8 @@ class CrowdRiseScraper(object):
 
 
 if __name__ == '__main__':
-    scraper = CrowdRiseScraper
-    scraper.find_projects('cancer', paginate=True)
+    # scraper = CrowdRiseScraper
+    # print scraper.find_projects('cancer', paginate=True)
 
 
     #
@@ -170,9 +154,9 @@ if __name__ == '__main__':
     # campaigns = scraper.find_projects('cancer')
     # for campaign in campaigns:
     #     print float(campaign.find('span', class_='meter').get('style').strip('width:').strip('%'))
-
-    # scraper = GoFundMeScraper
-    # projects = scraper.find_projects('cancer', True)
     #
-    # for project in projects:
-    #     print "{0} percent raised".format(int(project.find('span', class_='fill').get('style').strip('width: ').strip('%;')))
+    scraper = GoFundMeScraper
+    projects = scraper.find_projects('cancer', True)
+
+    for project in projects:
+        print "{0} percent raised".format(int(project.find('span', class_='fill').get('style').strip('width: ').strip('%;')))
