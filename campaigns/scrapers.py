@@ -106,8 +106,8 @@ class CrowdRiseScraper(object):
             try:
                 next_page_url = html.find('a', class_='page_link').get('href')
                 print next_page_url
-                other_project_paths = html.find_all('a', class_='page_link')  # TODO: This is still buggy fix meeeee
-                other_project_paths = filter(lambda path: path.get_text() == 'Next', other_project_paths)
+                other_project_paths = html.find_all('a', class_='page_link')
+                other_project_paths = filter(lambda path: path.get_text() == 'Next >', other_project_paths)
                 if other_project_paths:
                     more_projects = True
                 else:
@@ -121,14 +121,14 @@ class CrowdRiseScraper(object):
             while more_projects and reasonable_limit >= 0:
                 response = requests.get(next_page_url)
                 html = BeautifulSoup(response.content)
-                new_projects = html.find_all('div', class_='search_tile')
+                new_projects = html.find_all('div', class_='search_tile')  # TODO: This is still buggy fix meeeee
                 projects += new_projects
 
                 try:
                     next_page_path = html.find('a', class_='page_link').get('href')
 
                     other_project_paths = html.find_all('a', class_='page_link')
-                    other_project_paths = filter(lambda path: path.get_text() == 'Next', other_project_paths)
+                    other_project_paths = filter(lambda path: path.get_text() == 'Next >', other_project_paths)
                     if other_project_paths:
                         more_projects = True
                     else:
