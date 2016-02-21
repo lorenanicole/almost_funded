@@ -30,7 +30,7 @@ class KickstarterScraper(object):
 
                 reasonable_limit -= 1
                 next_page += 1
-                
+
         almost_funded = []
 
         for project in projects:
