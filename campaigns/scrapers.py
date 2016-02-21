@@ -16,20 +16,28 @@ class KickstarterScraper(object):
         query = urllib.quote_plus(query)
         request_url = cls.base_url + cls.discover_query_path.format(query)
         response = requests.get(request_url).content
-        content = json.loads(response)
+        projects = json.loads(response).get('projects')
 
         if paginate:
 
             reasonable_limit = 40
-
             next_page = 2
-            request_url = cls.base_url + cls.discover_query_path.format(query) + "&page={0}".format(next_page)
-            response = requests.get(request_url).content
-            content = json.loads(response)
 
+            while reasonable_limit >= 1:
+                request_url = cls.base_url + cls.discover_query_path.format(query) + "&page={0}".format(next_page)
+                response = requests.get(request_url).content
+                projects += json.loads(response).get('projects')
 
+                reasonable_limit -= 1
+                next_page += 1
+                
+        almost_funded = []
 
-        return content
+        for project in projects:
+            if 0.9 < project.get('pledged') / float(project.get('goal')) < 1.0 and project.get('state') == 'live':
+                almost_funded.append(project)
+
+        return almost_funded
 
 
 class GiveForwardScraper(object):
@@ -194,7 +202,7 @@ class CrowdRiseScraper(object):
 
 if __name__ == '__main__':
     scraper = KickstarterScraper
-    projects = scraper.find_projects('project', 'cancer', )
+    projects = scraper.find_projects('cancer', paginate=True)
 
     for project in projects:
         print project
