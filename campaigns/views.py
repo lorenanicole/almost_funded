@@ -10,5 +10,5 @@ def example(request):
 
 def scrape_kickstarter(request):
     scraper = KickstarterScraper
-    projects = scraper.scrape_projects("projects", "latino")
+    projects = scraper.find_projects("projects", "latino", )
     return HttpResponse(content=projects, status=200)

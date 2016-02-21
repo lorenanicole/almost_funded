@@ -3,7 +3,7 @@ import os
 import sys
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "almost_funded.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "almostfunded.settings")
 
     from django.core.management import execute_from_command_line
 

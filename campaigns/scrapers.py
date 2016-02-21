@@ -1,4 +1,5 @@
 import re
+import urllib
 import requests
 import json
 from bs4 import BeautifulSoup
@@ -7,15 +8,26 @@ from bs4 import BeautifulSoup
 class KickstarterScraper(object):
     # TODO: get list of all categories from projects for rendering possible list on main view
     base_url = "https://www.kickstarter.com"
-    projects_query_path = "/projects/search.json?search={0}&term={1}"
+    projects_query_path = "/projects/search.json?search=projects&term={0}"
+    discover_query_path = "/discover/advanced.json?search=projects&term={0}"
 
     @classmethod
-    def scrape_projects(cls, search, term):
-        request_url = cls.base_url + cls.projects_query_path.format(search, term)
+    def find_projects(cls, query, paginate=False):
+        query = urllib.quote_plus(query)
+        request_url = cls.base_url + cls.discover_query_path.format(query)
         response = requests.get(request_url).content
         content = json.loads(response)
-        for item in content:
-            print content
+
+        if paginate:
+
+            reasonable_limit = 40
+
+            next_page = 2
+            request_url = cls.base_url + cls.discover_query_path.format(query) + "&page={0}".format(next_page)
+            response = requests.get(request_url).content
+            content = json.loads(response)
+
+
 
         return content
 
@@ -23,9 +35,13 @@ class KickstarterScraper(object):
 class GiveForwardScraper(object):
     base_url = "http://www.giveforward.com"
     fundraiser_query_path = "/fundraisers?query={0}"
+    # expanded_fundraiser_query = "/fundraisers?authenticity_token={0}&page={1}&search%5B" \
+    #                             "filters%5D%5BClose%20To%20Goal%5D=1&search%5Bpage%5D={2}&" \
+    #                             "search%5Bper_page%5D=30&search%5Bterm%5D={3}&utf8=%E2%9C%93"
 
     @classmethod
-    def find_projects(cls, query):
+    def find_projects(cls, query, paginate=False):
+        query = urllib.quote_plus(query)
         response = requests.get(cls.base_url + cls.fundraiser_query_path.format(query))
         html = BeautifulSoup(response.content)
         # button = html.find('input', {'id': 'search_filters_Close To Goal'})
@@ -33,8 +49,38 @@ class GiveForwardScraper(object):
         projects = html.find_all('div', class_='fr-card-search')
         almost_funded = []
 
+        if paginate:
+
+            next_page_path = filter(lambda path: 'Next' in path.get_text(), html.find('nav', class_='pagination').find_all('a'))
+
+            if next_page_path:
+                # TODO: Why doesn't it work to crawl to successive pages? There's a CSRF token (it's a Rails App), investigate?
+
+                next_page_path = next_page_path[0].get('href')
+                current_page = int(re.findall('\d', next_page_path)[0])
+
+            reasonable_limit = 10
+
+            # while next_page_path and reasonable_limit >= 1:
+            #     response = requests.get(cls.base_url + next_page_path)
+            #     html = BeautifulSoup(response.content)
+            #     # content csrf-token
+            #     new_projects = html.find_all('div', class_='fr-card-search')
+            #     projects += new_projects
+            #
+            #     csrf_token = filter(lambda meta: meta.get('name') == 'csrf-token', html.find_all('meta'))
+            #
+            #     if csrf_token:
+            #         # current_page = int(re.findall('\d', next_page_path)[0])
+            #         next_page_path = cls.meh.format(csrf_token[0].get('content'), current_page + 1, query) #cls.expanded_fundraiser_query.format(csrf_token[0].get('content'), current_page + 1, current_page, query)
+            #
+            #     print next_page_path
+            #     current_page += 1
+            #     reasonable_limit -= 1
+
         for project in projects:
             percent_raised = float(project.find('span', class_='meter').get('style').strip('width:').strip('%'))
+            print "percent raised: ", percent_raised
             if 90.0 < percent_raised < 100.0:
                 almost_funded.append(project)
 
@@ -47,6 +93,7 @@ class GoFundMeScraper(object):
 
     @classmethod
     def find_projects(cls, query, paginate=False):
+        query = urllib.quote_plus(query)
         response = requests.get(cls.base_url + cls.fundraiser_query_path.format(query))
         html = BeautifulSoup(response.content)
         projects = html.find_all('div', class_='search_tile')
@@ -94,6 +141,7 @@ class CrowdRiseScraper(object):
 
     @classmethod
     def find_projects(cls, query, paginate=False):
+        query = urllib.quote_plus(query)
         response = requests.get(cls.base_url + cls.fundraiser_query_path.format(query, query, query))
         html = BeautifulSoup(response.content)
         projects = html.find_all('div', class_='content clearfix ')
@@ -145,18 +193,22 @@ class CrowdRiseScraper(object):
 
 
 if __name__ == '__main__':
+    scraper = KickstarterScraper
+    projects = scraper.find_projects('project', 'cancer', )
+
+    for project in projects:
+        print project
+
     # scraper = CrowdRiseScraper
     # print scraper.find_projects('cancer', paginate=True)
 
-
-    #
     # scraper = GiveForwardScraper
-    # campaigns = scraper.find_projects('cancer')
+    # campaigns = scraper.find_projects('cancer', paginate=True)
     # for campaign in campaigns:
     #     print float(campaign.find('span', class_='meter').get('style').strip('width:').strip('%'))
-    #
-    scraper = GoFundMeScraper
-    projects = scraper.find_projects('cancer', True)
 
-    for project in projects:
-        print "{0} percent raised".format(int(project.find('span', class_='fill').get('style').strip('width: ').strip('%;')))
+    # scraper = GoFundMeScraper
+    # projects = scraper.find_projects('cancer', True)
+    #
+    # for project in projects:
+    #     print "{0} percent raised".format(int(project.find('span', class_='fill').get('style').strip('width: ').strip('%;')))
