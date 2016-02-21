@@ -165,7 +165,12 @@ class CrowdRiseScraper(object):
             reasonable_limit = 40
 
             while next_page_url and reasonable_limit >= 1:
-                response = requests.get(next_page_url)
+
+                try:
+                    response = requests.get(next_page_url)
+                except Exception as e:
+                    continue
+
                 html = BeautifulSoup(response.content)
                 new_projects = html.find_all('div', class_='content clearfix ')  # TODO: This is still buggy fix meeeee
                 projects += new_projects
