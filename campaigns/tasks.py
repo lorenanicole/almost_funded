@@ -29,9 +29,9 @@ def task_scrape_latest_kickstarter():
     last_updated = datetime.utcnow()
 
     for category in KICKSTARTER_CATEGORIES:
-        print "processing category ", category
+        logger.info("Kickstarter processing category " + category)
         projects += scraper.find_projects(category, paginate=True)
-    print "mapping into Campaigns"
+
     projects = map(lambda p: {'name': p.get('name'),
                                 'deadline': datetime.utcfromtimestamp(p.get('deadline')),
                                 'goal': p.get('goal'),
@@ -45,6 +45,6 @@ def task_scrape_latest_kickstarter():
                                 'category': Category.objects.get_or_create(category=p.get('category', {}).get('slug', 'N/A'))[0]}, projects)
 
     projects = map(lambda p: Campaign(**p), projects)
-    print "Bulk creating"
+    logger.info("Kickstarter scraper - Bulk creating")
     Campaign.objects.bulk_create(projects)
     logger.info("Saved latest almost funded projects from Kickstarter")
