@@ -6,7 +6,6 @@ class Category(models.Model):
     category = models.CharField(max_length=100)
 
 class Campaign(models.Model):
-    # artist = models.ForeignKey(Musician, on_delete=models.CASCADE)
     name = models.CharField(db_index=True, max_length=100)
     deadline = models.DateField(db_index=True)
     goal = models.IntegerField(db_index=True)
