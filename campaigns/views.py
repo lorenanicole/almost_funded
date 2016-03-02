@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from campaigns.models import Campaign
 from scrapers import KickstarterScraper, GoFundMeScraper
 
+COLORS = ['orange', 'purple', 'green', 'blue', 'red']
 
 def index(request):
     return render(request, 'example.html', context={'hi':'world'}, status=200)
@@ -49,10 +50,7 @@ def latest_kickstarter(request):
     for p in projects:
         p['deadline'] = p['deadline'].isoformat()
 
-    # return JsonResponse({'projects': projects}, status=200)
-    # from django.template.loader import get_template
-    # template = get_template('jinja2/index.html')
-    return render(request, 'jinja2/index.html', context={'projects': projects, 'title': 'Kickstarter', 'colors': ['orange', 'purple', 'green', 'blue', 'red']}, status=200, using='jinja2')
+    return render(request, 'jinja2/index.html', context={'projects': projects, 'title': 'Kickstarter', 'colors': COLORS}, status=200, using='jinja2')
 
 def latest_gofundme(request):
     count = request.GET.get('count')
@@ -65,4 +63,27 @@ def latest_gofundme(request):
     for p in projects:
         p['deadline'] = p['deadline'].isoformat()
 
-    return JsonResponse({'projects': projects}, status=200)
+    return render(request, 'jinja2/index.html', context={'projects': projects, 'title': 'GoFundMe', 'colors': COLORS}, status=200, using='jinja2')
+
+def latest_crowdrise(request):
+    count = request.GET.get('count')
+
+    if not count:
+        count = 50
+
+    projects = list(Campaign.objects.order_by('last_updated').filter(source=2).values('id', 'name', 'url', 'goal', 'raised', 'description', 'category').reverse()[:count])
+
+    return render(request, 'jinja2/index.html', context={'projects': projects, 'title': 'CrowdRise', 'colors': COLORS}, status=200, using='jinja2')
+
+def latest_giveforward(request):
+    count = request.GET.get('count')
+
+    if not count:
+        count = 50
+
+    projects = list(Campaign.objects.order_by('last_updated').filter(source=3).values('id', 'name', 'url', 'goal', 'raised', 'description', 'category').reverse()[:count])
+
+    for p in projects:
+        p['deadline'] = p['deadline'].isoformat()
+
+    return render(request, 'jinja2/index.html', context={'projects': projects, 'title': 'GiveForward', 'colors': COLORS}, status=200, using='jinja2')

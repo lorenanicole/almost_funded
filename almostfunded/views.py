@@ -3,5 +3,11 @@ from django.http import HttpResponse
 
 # Create your views here.
 
+COLORS = ['orange', 'purple', 'green', 'blue', 'red']
+
 def index(request):
-    return HttpResponse(content="Main page", status=200)
+  return render(request, 'jinja2/main.html',
+                context={'platforms': ['CrowdRise', 'GiveForward', 'GoFundMe', 'Kickstarter'],
+                         'title': 'Almost Funded',
+                         'colors': COLORS},
+                status=200, using='jinja2')

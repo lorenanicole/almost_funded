@@ -72,7 +72,8 @@ TEMPLATES = [
     },
     {
         'BACKEND': "django.template.backends.jinja2.Jinja2",
-        'DIRS': [os.path.join(PROJECT_PATH, 'campaigns/templates').replace('\\','/')],
+        'DIRS': [os.path.join(PROJECT_PATH, 'campaigns/templates').replace('\\','/'),
+                 os.path.join(PROJECT_PATH, 'almostfunded/templates').replace('\\','/')],
         "APP_DIRS": True,
         "OPTIONS": {
             'environment': 'jinja2env.environment',
