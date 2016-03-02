@@ -20,6 +20,5 @@ from views import *
 
 urlpatterns = [
     url(r'^$', index, name='index'),
-    url(r'^admin/', include(admin.site.urls)),
     url(r'^campaigns/', include(urls)),
 ]

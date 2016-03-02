@@ -1,8 +1,10 @@
 import re
 import urllib
+from datetime import datetime
 import requests
 import json
 from bs4 import BeautifulSoup
+from campaigns.serializers import ProjectSerializer, CrowdRiseSerializer
 
 
 class KickstarterScraper(object):
@@ -36,6 +38,10 @@ class KickstarterScraper(object):
         for project in projects:
             if 0.9 < project.get('pledged') / float(project.get('goal')) < 1.0 and project.get('state') == 'live':
                 almost_funded.append(project)
+
+        last_updated = datetime.utcnow()
+
+        almost_funded = map(lambda p: ProjectSerializer.factory('kickstarter', p, query, last_updated), projects)
 
         return almost_funded
 
@@ -113,9 +119,9 @@ class GoFundMeScraper(object):
             if next_page_path:
                 next_page_path = next_page_path[0].get('href')
 
-            num_projects = html.find('div', class_='numbers').get_text()
+            num_projects = html.find('div', class_='numbers')
 
-            if 'thousands' in num_projects:
+            if num_projects and 'thousands' in num_projects.get_text():
                 reasonable_limit = 20
             else:
                 reasonable_limit = 40
@@ -134,13 +140,16 @@ class GoFundMeScraper(object):
                 reasonable_limit -= 1
 
         almost_funded = []
+        print query + " projects: " + str(len(projects))
 
-        for project in projects:
-            percent_raised = int(project.find('span', class_='fill').get('style').strip('width: ').strip('%;'))
+        last_updated = datetime.utcnow()
+        for p in projects:
+            percent_raised = int(p.find('span', class_='fill').get('style').strip('width: ').strip('%;'))
 
             if 90.0 < percent_raised < 100.0:
-                almost_funded.append(project)
+                almost_funded.append(ProjectSerializer.factory('gofundme', p, query, last_updated))
 
+        print query + " almost funded projects: " + str(len(almost_funded))
         return almost_funded
 
 class CrowdRiseScraper(object):
@@ -188,40 +197,46 @@ class CrowdRiseScraper(object):
 
         almost_funded = []
 
-        for project in projects:
-            description = project.find('div', class_='searchResultsStory').get_text()
-
-            budget_items = list(re.findall('\$\d{1,}', description))
-            budget_items = map(lambda item: int(item.strip('$')), budget_items)
+        last_updated = datetime.utcnow()
+        for p in projects:
+            description = p.find('div', class_='searchResultsStory').get_text().replace(',','')
+            raised = int(re.findall('Far:\n\t{1,}\$\d{1,}', description)[0].strip('\n\tFar:$ '))
+            goal = float(re.findall('Goal:\n\t{1,}\$\d{1,}', description)[0].strip('\n\tGoal:$ '))
 
             try:
-                percent_raised = budget_items[0] / float(budget_items[1])
+
+                percent_raised = raised / goal
 
                 if 0.90 < percent_raised < 1.0:
-                    almost_funded.append(project)
+                    print "yup ", percent_raised
+                    almost_funded.append(CrowdRiseSerializer(p, query, last_updated))
+
             except ZeroDivisionError as e:
-                percent_raised = 0.0
+                continue
 
         return almost_funded
 
 
 if __name__ == '__main__':
     scraper = KickstarterScraper
+    # projects = scraper.find_projects('cancer', paginate=True)
+
+    #
+    scraper = CrowdRiseScraper
     projects = scraper.find_projects('cancer', paginate=True)
 
-    for project in projects:
-        print project
-
-    # scraper = CrowdRiseScraper
-    # print scraper.find_projects('cancer', paginate=True)
-
     # scraper = GiveForwardScraper
-    # campaigns = scraper.find_projects('cancer', paginate=True)
+    # campaigns = scraper.find_projects('cancer')
     # for campaign in campaigns:
     #     print float(campaign.find('span', class_='meter').get('style').strip('width:').strip('%'))
 
     # scraper = GoFundMeScraper
     # projects = scraper.find_projects('cancer', True)
+    # print len(projects)
     #
     # for project in projects:
     #     print "{0} percent raised".format(int(project.find('span', class_='fill').get('style').strip('width: ').strip('%;')))
+
+    for project in projects:
+        print type(project)
+        print project

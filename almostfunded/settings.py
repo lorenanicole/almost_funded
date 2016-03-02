@@ -53,10 +53,13 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'almostfunded.urls'
 
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(PROJECT_ROOT, 'templates').replace('\\','/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,6 +69,14 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+    },
+    {
+        'BACKEND': "django.template.backends.jinja2.Jinja2",
+        'DIRS': [os.path.join(PROJECT_PATH, 'campaigns/templates').replace('\\','/')],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            'environment': 'jinja2env.environment',
+        }
     },
 ]
 
