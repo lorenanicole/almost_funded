@@ -15,7 +15,7 @@ logger = get_task_logger(__name__)
 
 
 @periodic_task(
-    run_every=(crontab(minute='*/15')),
+    run_every=(crontab(minute='0', hour='1')),
     name="task_scrape_latest_kickstarter",
     ignore_result=True
 )
@@ -35,13 +35,11 @@ def task_scrape_latest_kickstarter():
         logger.info("Kickstarter processing category " + category)
         projects += scraper.find_projects(category, paginate=True)
 
-    project_data_map = {p.get('url'): p for p in projects}
+    project_data_map = {p.url: p for p in projects}
 
     project_urls = set(project_data_map.keys())
 
     existing = list(Campaign.objects.filter(url__in=project_urls))  # .values_list('id', flat=True)
-
-    projects = filter(lambda p: p.url not in existing, projects)
 
     print "Kickstarter scraper - Bulk creating"
     logger.info("Kickstarter scraper - Bulk creating")
@@ -63,7 +61,7 @@ def task_scrape_latest_kickstarter():
 
 
 @periodic_task(
-    run_every=(crontab(minute='*/15')),
+    run_every=(crontab(minute='0', hour='1')),
     name="task_scrape_latest_gofundme",
     ignore_result=True
 )
@@ -86,7 +84,7 @@ def task_scrape_latest_gofundme():
     project_data_map = {}
 
     for p in projects:
-        project_data_map[p['url']] = p
+        project_data_map[p.url] = p
 
     project_urls = set(project_data_map.keys())
 
@@ -112,7 +110,7 @@ def task_scrape_latest_gofundme():
     logger.info("Saved " + str(len(existing)) + " latest almost funded projects from GoFundMe")
 
 @periodic_task(
-    run_every=(crontab(minute='*/15')),
+    run_every=(crontab(minute='0', hour='1')),
     name="task_scrape_latest_crowdrise",
     ignore_result=True
 )
@@ -134,7 +132,7 @@ def task_scrape_latest_crowdrise():
         projects += new_projects
 
     for p in projects:
-        project_data_map[p['url']] = p
+        project_data_map[p.url] = p
 
     project_urls = set(project_data_map.keys())
 
