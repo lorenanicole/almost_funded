@@ -13,11 +13,11 @@ class Campaign(models.Model):
         (3, 'giveforward'),
     )
 
-    name = models.CharField(db_index=True, max_length=100)
+    name = models.CharField(db_index=True, max_length=200)
     deadline = models.DateField(db_index=True)
     goal = models.IntegerField(db_index=True)
     raised = models.IntegerField(db_index=True)
-    url = models.CharField(max_length=100)
+    url = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
     last_updated = models.DateField()
     recipient = models.CharField(max_length=200)

@@ -16,7 +16,7 @@ mkdir stylesheets # If doesn't exist, in this case it does
 bourbon install
 mkdir sass # If doesn't exist, in this case it does
 mv bourbon sass/bourbon
-sass --watchlesheets/sass:stylesheets # Have Bourbon watch as create .scss file to generate .css files
+sass --watch stylesheets/sass:stylesheets# Have Bourbon watch as create .scss file to generate .css files
 vi main.scss # Start a .scss file
 ```
 As resulting `.css` files are created can add them to templates. 

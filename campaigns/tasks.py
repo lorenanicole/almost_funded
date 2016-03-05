@@ -44,7 +44,7 @@ def task_scrape_latest_kickstarter():
     print "Kickstarter scraper - Bulk creating"
     logger.info("Kickstarter scraper - Bulk creating")
 
-    projects = map(lambda p: Campaign(**p), projects)
+    projects = map(lambda p: Campaign(**p.to_dict()), projects)
     Campaign.objects.bulk_create(projects)
     print "Kickstarter scraper - Bulk update"
     logger.info("Kickstarter scraper - Bulk update")
@@ -95,7 +95,7 @@ def task_scrape_latest_gofundme():
     print "GoFundMe scraper - Bulk creating " + str(len(projects)) + " projects"
     logger.info("GoFundMe scraper - Bulk creating " + str(len(projects)) + " projects")
 
-    projects = map(lambda p: Campaign(**p), projects)
+    projects = map(lambda p: Campaign(**p.to_dict()), projects)
     Campaign.objects.bulk_create(projects)
     print "GoFundMe scraper - Bulk update"
     logger.info("GoFundMe scraper - Bulk update")
@@ -143,7 +143,7 @@ def task_scrape_latest_crowdrise():
     print "CrowdRise scraper - Bulk creating " + str(len(projects)) + " projects"
     logger.info("CrowdRise scraper - Bulk creating " + str(len(projects)) + " projects")
 
-    projects = map(lambda p: Campaign(**p), projects)
+    projects = map(lambda p: Campaign(**p.to_dict()), projects)
     Campaign.objects.bulk_create(projects)
     print "CrowdRise scraper - Bulk update"
     logger.info("CrowdRise scraper - Bulk update")

@@ -9,6 +9,9 @@ def index(request):
     return render(request, 'example.html', context={'hi':'world'}, status=200)
 
 def example(request):
+    scraper = KickstarterScraper
+    projects = scraper.find_projects('cancer', paginate=True)
+    projects = map(lambda p: Campaign(**p.to_dict()), projects)
     return HttpResponse(content="Hello world", status=200)
 
 def scrape_kickstarter(request):

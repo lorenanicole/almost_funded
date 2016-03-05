@@ -4,6 +4,7 @@ from datetime import datetime
 import requests
 import json
 from bs4 import BeautifulSoup
+from campaigns.models import Campaign
 from campaigns.serializers import ProjectSerializer, CrowdRiseSerializer
 
 
@@ -41,7 +42,7 @@ class KickstarterScraper(object):
 
         last_updated = datetime.utcnow()
 
-        almost_funded = map(lambda p: ProjectSerializer.factory('kickstarter', p, query, last_updated), projects)
+        almost_funded = map(lambda p: ProjectSerializer.factory('kickstarter', p, query, last_updated), almost_funded)
 
         return almost_funded
 
@@ -220,10 +221,11 @@ class CrowdRiseScraper(object):
 if __name__ == '__main__':
     scraper = KickstarterScraper
     # projects = scraper.find_projects('cancer', paginate=True)
+    # projects = map(lambda p: Campaign(**p.to_dict()), projects)
 
     #
-    scraper = CrowdRiseScraper
-    projects = scraper.find_projects('cancer', paginate=True)
+    # scraper = CrowdRiseScraper
+    # projects = scraper.find_projects('cancer', paginate=True)
 
     # scraper = GiveForwardScraper
     # campaigns = scraper.find_projects('cancer')

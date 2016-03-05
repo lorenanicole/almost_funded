@@ -4,7 +4,7 @@ from views import scrape_kickstarter, latest_kickstarter, example, latest, lates
     latest_giveforward
 
 urlpatterns = [
-    url(r'^example/', index, name='index'),
+    url(r'^example/', example, name='example'),
     url(r'^latest/', latest, name='latest'),
     url(r'^kickstarter/latest', latest_kickstarter, name='latest_kickstarter'),
     url(r'^kickstarter/', scrape_kickstarter, name='scrape_kickstarter'),

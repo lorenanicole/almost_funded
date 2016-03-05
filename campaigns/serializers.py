@@ -25,6 +25,22 @@ class BaseProjectSerializer(object):
     def __str__(self):
         return "{0} campaign {1} - {2} - has raised {3} of {4}.".format(self.__class__, self.name, self.url, self.raised, self.goal)
 
+    def to_dict(self):
+        return {
+                    'name': self.name,
+                    'deadline': self.deadline,
+                    'goal': self.goal,
+                    'raised': self.raised,
+                    'url': self.url,
+                    'description': self.description,
+                    'last_updated': self.last_updated,
+                    'recipient': self.recipient,
+                    'creator': self.creator,
+                    'location': self.location,
+                    'category': self.category,
+                    'source': self.source
+                }
+
 
 class KickstarterSerializer(BaseProjectSerializer):
     def set_name(self):
