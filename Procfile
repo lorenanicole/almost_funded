@@ -1,1 +1,1 @@
-web: gunicorn almostfunded.wsgi
+web: gunicorn project.wsgi:application --log-file=-
