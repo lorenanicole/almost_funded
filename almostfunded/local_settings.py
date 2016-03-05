@@ -103,7 +103,6 @@ DATABASES = {
     }
 }
 
-DATABASES['default'] = dj_database_url.config(default='postgres://wmcwjitojxsubs:tGw-D8C5dDuG2VXK43aLGRwUTM@ec2-107-22-184-127.compute-1.amazonaws.com:5432/dub8gfnhbj7p7', conn_max_age=600)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -130,17 +129,11 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
 
-# Simplified static file serving.
-# https://warehouse.python.org/project/whitenoise/
-# https://devcenter.heroku.com/articles/django-assets
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
 # Celery Config
 
-BROKER_URL = 'amqp://ocvnsdvj:7S7xuTQStyy3TwIAOaouNuLPKuyeCRmb@jaguar.rmq.cloudamqp.com/ocvnsdvj'
+BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/Chicago'
-BROKER_POOL_LIMIT = 3
