@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import dj_database_url
+
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -100,6 +103,7 @@ DATABASES = {
     }
 }
 
+DATABASES['default'] = dj_database_url.config(default='postgres://wmcwjitojxsubs:tGw-D8C5dDuG2VXK43aLGRwUTM@ec2-107-22-184-127.compute-1.amazonaws.com:5432/dub8gfnhbj7p7', conn_max_age=600)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
