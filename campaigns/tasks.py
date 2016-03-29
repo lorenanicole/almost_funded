@@ -79,7 +79,7 @@ def task_scrape_latest_gofundme():
     for category in CATEGORIES:
         print "GoFundMe processing category " + category
         logger.info("GoFundMe processing category " + category)
-        categories['category'] = scraper.find_projects(category, paginate=True)
+        projects += scraper.find_projects(category, paginate=True)
 
     project_data_map = {}
 

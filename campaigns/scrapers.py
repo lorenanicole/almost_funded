@@ -146,10 +146,9 @@ class GoFundMeScraper(object):
         last_updated = datetime.utcnow()
         for p in projects:
             percent_raised = int(p.find('span', class_='fill').get('style').strip('width: ').strip('%;'))
-
+            print percent_raised
             if 90.0 < percent_raised < 100.0:
                 almost_funded.append(ProjectSerializer.factory('gofundme', p, query, last_updated))
-
         print query + " almost funded projects: " + str(len(almost_funded))
         return almost_funded
 
