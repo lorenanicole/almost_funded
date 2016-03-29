@@ -96,6 +96,7 @@ def task_scrape_latest_gofundme():
     logger.info("GoFundMe scraper - Bulk creating " + str(len(projects)) + " projects")
 
     projects = map(lambda p: Campaign(**p.to_dict()), projects)
+    print "len of projects ", len(projects)
     Campaign.objects.bulk_create(projects)
     print "GoFundMe scraper - Bulk update"
     logger.info("GoFundMe scraper - Bulk update")
