@@ -18,7 +18,7 @@ class Campaign(models.Model):
     goal = models.IntegerField(db_index=True)
     raised = models.IntegerField(db_index=True)
     url = models.CharField(max_length=200)
-    description = models.CharField(max_length=200)
+    description = models.TextField()
     last_updated = models.DateField()
     recipient = models.CharField(max_length=200)
     creator = models.CharField(max_length=200)
