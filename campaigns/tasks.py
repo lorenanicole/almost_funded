@@ -91,7 +91,7 @@ def task_scrape_latest_gofundme():
     existing = list(Campaign.objects.filter(url__in=project_urls))  # .values_list('id', flat=True)
 
     projects = filter(lambda p: p.url not in existing, projects)
-
+    print "len of projects before", len(projects)
     print "GoFundMe scraper - Bulk creating " + str(len(projects)) + " projects"
     logger.info("GoFundMe scraper - Bulk creating " + str(len(projects)) + " projects")
 

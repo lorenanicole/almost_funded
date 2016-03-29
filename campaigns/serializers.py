@@ -126,7 +126,7 @@ class GoFundMeSerializer(BaseProjectSerializer):
         return list(re.findall('\$\d{1,}', raised))[0].strip('$')
 
     def set_url(self):
-        return self.data.find('div', class_='details').find('a', class_='title').get('href', 'N/A')
+        return "http:" + self.data.find('div', class_='details').find('a', class_='title').get('href', 'N/A')
 
     def set_description(self):
         return None

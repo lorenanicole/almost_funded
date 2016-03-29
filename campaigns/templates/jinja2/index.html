@@ -15,16 +15,22 @@
     {% set color = colors|random %}
       <div class="tile {{ color }}">
           <h3 class="title"><a href={{ item[0].url }}>{{ item[0].name }}</a></h3>
-          <h4>{{ item[1].category }}</h4>
+          <h4>Category: {{ item[0].category.category|title }}</h4>
+          {% if item[0].description %}
           <p>{{  item[0].description }}</p>
+          {% endif %}
           <p>Raised ${{  item[0].raised }} of ${{  item[0].goal }}.</p>
+          <p style="visibility: hidden">How now brown cow wowowowowwowowowo these are fun lorem upsoum thoughts I thave!!</p>
       </div>
       {% set color = colors|random %}
       <div class="tile {{ color }}">
         <h3 class="title"><a href={{ item[1].url }}>{{ item[1].name }}</a></h3>
-        <h4>{{ item[1].category }}</h4>
+        <h4>Category: {{ item[1].category.category|title }}</h4>
+        {% if item[1].description %}
         <p>{{  item[1].description }}</p>
-        <p>Raised {{  item[1].raised }} of {{  item[1].goal }}.</p>
+         {%  endif %}
+        <p>Raised ${{  item[1].raised }} of ${{  item[1].goal }}.</p>
+      <p style="visibility: hidden">How now brown cow wowowowowwowowowo these are fun lorem upsoum thoughts I thave!!</p>
       </div>
     </div>
 {% endfor %}

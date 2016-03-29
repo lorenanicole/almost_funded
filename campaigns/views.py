@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from campaigns.models import Campaign
+from campaigns.models import Campaign, Category
 from scrapers import KickstarterScraper, GoFundMeScraper
 
 COLORS = ['orange', 'purple', 'green', 'blue', 'red']
@@ -34,7 +34,7 @@ def latest(request):
     if not count:
         count = 50
 
-    projects = list(Campaign.objects.order_by('last_updated').values('id', 'name', 'url', 'goal', 'raised', 'deadline', 'description', 'category').reverse()[:count])
+    projects = list(Campaign.objects.order_by('last_updated').reverse()[:count])
 
     for p in projects:
         p['deadline'] = p['deadline'].isoformat()
@@ -48,7 +48,7 @@ def latest_kickstarter(request):
     if not count:
         count = 50
 
-    projects = list(Campaign.objects.order_by('last_updated').filter(source=0).values('id', 'name', 'url', 'goal', 'raised', 'deadline', 'description', 'category').reverse()[:count])
+    projects = list(Campaign.objects.order_by('last_updated').filter(source=0).reverse()[:count])
 
     for p in projects:
         p['deadline'] = p['deadline'].isoformat()
@@ -61,11 +61,7 @@ def latest_gofundme(request):
     if not count:
         count = 50
 
-    projects = list(Campaign.objects.order_by('last_updated').filter(source=1).values('id', 'name', 'url', 'goal', 'raised', 'deadline', 'description', 'category').reverse()[:count])
-
-    for p in projects:
-        p['deadline'] = p['deadline'].isoformat()
-
+    projects = list(Campaign.objects.order_by('last_updated').filter(source=1).reverse()[:count])
     return render(request, 'jinja2/index.html', context={'projects': projects, 'title': 'GoFundMe', 'colors': COLORS}, status=200, using='jinja2')
 
 def latest_crowdrise(request):
@@ -74,7 +70,7 @@ def latest_crowdrise(request):
     if not count:
         count = 50
 
-    projects = list(Campaign.objects.order_by('last_updated').filter(source=2).values('id', 'name', 'url', 'goal', 'raised', 'description', 'category').reverse()[:count])
+    projects = list(Campaign.objects.order_by('last_updated').filter(source=2).reverse()[:count])
 
     return render(request, 'jinja2/index.html', context={'projects': projects, 'title': 'CrowdRise', 'colors': COLORS}, status=200, using='jinja2')
 
@@ -84,7 +80,7 @@ def latest_giveforward(request):
     if not count:
         count = 50
 
-    projects = list(Campaign.objects.order_by('last_updated').filter(source=3).values('id', 'name', 'url', 'goal', 'raised', 'description', 'category').reverse()[:count])
+    projects = list(Campaign.objects.order_by('last_updated').filter(source=3).reverse()[:count])
 
     for p in projects:
         p['deadline'] = p['deadline'].isoformat()
