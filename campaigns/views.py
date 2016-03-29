@@ -37,7 +37,8 @@ def latest(request):
     projects = list(Campaign.objects.order_by('last_updated').reverse()[:count])
 
     for p in projects:
-        p['deadline'] = p['deadline'].isoformat()
+        if p.deadline:
+            p.deadline = p.deadline.isoformat()
 
     return JsonResponse({'projects': projects}, status=200)
 
@@ -51,7 +52,7 @@ def latest_kickstarter(request):
     projects = list(Campaign.objects.order_by('last_updated').filter(source=0).reverse()[:count])
 
     for p in projects:
-        p['deadline'] = p['deadline'].isoformat()
+        p.deadline = p.deadline.isoformat()
 
     return render(request, 'jinja2/index.html', context={'projects': projects, 'title': 'Kickstarter', 'colors': COLORS}, status=200, using='jinja2')
 
