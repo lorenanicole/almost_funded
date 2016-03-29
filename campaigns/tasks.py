@@ -15,7 +15,7 @@ logger = get_task_logger(__name__)
 
 
 @periodic_task(
-    run_every=(crontab(minute='0', hour='1')),
+    run_every=(crontab(minute='*/15')),
     name="task_scrape_latest_kickstarter",
     ignore_result=True
 )
@@ -61,7 +61,7 @@ def task_scrape_latest_kickstarter():
 
 
 @periodic_task(
-    run_every=(crontab(minute='0', hour='1')),
+    run_every=(crontab(minute='*/15')),
     name="task_scrape_latest_gofundme",
     ignore_result=True
 )
@@ -111,7 +111,7 @@ def task_scrape_latest_gofundme():
     logger.info("Saved " + str(len(existing)) + " latest almost funded projects from GoFundMe")
 
 @periodic_task(
-    run_every=(crontab(minute='0', hour='1')),
+    run_every=(crontab(minute='*/15')),
     name="task_scrape_latest_crowdrise",
     ignore_result=True
 )
