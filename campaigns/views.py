@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from campaigns.models import Campaign, Category
-from campaigns.tasks import task_scrape_latest_gofundme
+from campaigns.models import Campaign
 from scrapers import KickstarterScraper, GoFundMeScraper
 
 COLORS = ['orange', 'purple', 'green', 'blue', 'red']
