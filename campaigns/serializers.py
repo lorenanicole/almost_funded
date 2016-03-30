@@ -119,13 +119,14 @@ class GoFundMeSerializer(BaseProjectSerializer):
         #  TODO: This is broken :'(
         percent_raised = int(self.data.find('span', class_='fill').get('style').strip('width: ').strip('%;'))
         raised = self.data.find('div', class_='details').find('a', class_='amt').get_text().encode('utf-8')
-        raised = list(re.findall('\$\d{1,}', raised))[0].strip('$')
-        return int(percent_raised * int(raised))
+        raised = int(''.join(c for c in raised[1:raised.find('raised')] if c.isdigit()))
+        # list(re.findall('\$\d{1,},{0,1}\d{0,}', raised))[0].strip('$')
+        return int(percent_raised * raised)
 
     def set_raised(self):
         # TODO: This is broken :'(
         raised = self.data.find('div', class_='details').find('a', class_='amt').get_text().encode('utf-8')
-        return list(re.findall('\$\d{1,}', raised))[0].strip('$')
+        return int(''.join(c for c in raised[1:raised.find('raised')] if c.isdigit()))
 
     def set_url(self):
         return "http:" + self.data.find('div', class_='details').find('a', class_='title').get('href', 'N/A')
