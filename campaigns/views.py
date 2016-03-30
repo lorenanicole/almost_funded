@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from campaigns.models import Campaign, Category
+from campaigns.tasks import task_scrape_latest_gofundme
 from scrapers import KickstarterScraper, GoFundMeScraper
 
 COLORS = ['orange', 'purple', 'green', 'blue', 'red']
@@ -26,6 +27,7 @@ def scrape_gofundme(request):
     projects = scraper.find_projects("projects", paginate=True)
     projects = map(lambda p: Campaign(**p.__dict__), projects)
     Campaign.objects.bulk_create(projects)
+    # projects = task_scrape_latest_gofundme.apply()
     return JsonResponse({'projects': projects}, status=200)
 
 def latest(request):
