@@ -6,9 +6,6 @@ from scrapers import KickstarterScraper, GoFundMeScraper
 
 COLORS = ['orange', 'purple', 'green', 'blue', 'red']
 
-def index(request):
-    return render(request, 'example.html', context={'hi':'world'}, status=200)
-
 def example(request):
     scraper = KickstarterScraper
     projects = scraper.find_projects('cancer', paginate=True)
@@ -69,7 +66,7 @@ def latest_kickstarter(request):
     for p in projects:
         p.deadline = p.deadline.isoformat()
 
-    return render(request, 'jinja2/index.html', context={'projects': projects, 'title': 'Kickstarter', 'colors': COLORS}, status=200, using='jinja2')
+    return render(request, 'jinja2/tile.html', context={'projects': projects, 'title': 'Kickstarter', 'colors': COLORS}, status=200, using='jinja2')
 
 def latest_gofundme(request):
     count = request.GET.get('count')
@@ -78,7 +75,7 @@ def latest_gofundme(request):
         count = 50
 
     projects = list(Campaign.objects.order_by('last_updated').filter(source=1).reverse()[:count])
-    return render(request, 'jinja2/index.html', context={'projects': projects, 'title': 'GoFundMe', 'colors': COLORS}, status=200, using='jinja2')
+    return render(request, 'jinja2/tile.html', context={'projects': projects, 'title': 'GoFundMe', 'colors': COLORS}, status=200, using='jinja2')
 
 def latest_crowdrise(request):
     count = request.GET.get('count')
@@ -88,7 +85,7 @@ def latest_crowdrise(request):
 
     projects = list(Campaign.objects.order_by('last_updated').filter(source=2).reverse()[:count])
 
-    return render(request, 'jinja2/index.html', context={'projects': projects, 'title': 'CrowdRise', 'colors': COLORS}, status=200, using='jinja2')
+    return render(request, 'jinja2/tile.html', context={'projects': projects, 'title': 'CrowdRise', 'colors': COLORS}, status=200, using='jinja2')
 
 def latest_giveforward(request):
     count = request.GET.get('count')
@@ -101,4 +98,4 @@ def latest_giveforward(request):
     for p in projects:
         p['deadline'] = p['deadline'].isoformat()
 
-    return render(request, 'jinja2/index.html', context={'projects': projects, 'title': 'GiveForward', 'colors': COLORS}, status=200, using='jinja2')
+    return render(request, 'jinja2/tile.html', context={'projects': projects, 'title': 'GiveForward', 'colors': COLORS}, status=200, using='jinja2')

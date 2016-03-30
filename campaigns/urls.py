@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from views import scrape_kickstarter, latest_kickstarter, example, latest, latest_gofundme, index, latest_crowdrise, \
+from views import scrape_kickstarter, latest_kickstarter, example, latest, latest_gofundme, latest_crowdrise, \
     latest_giveforward, scrape_gofundme
 
 urlpatterns = [

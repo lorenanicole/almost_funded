@@ -1,0 +1,38 @@
+<link href='https://fonts.googleapis.com/css?family=Playfair+Display:700' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="{{ static('stylesheets/main.css') }}">
+{% set color = colors|random %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 headline">
+      <h1><strong>{{  title  }}</strong></h1>
+    </div>
+  </div>
+
+{% for item in projects|batch(2, '&nbsp;') %}
+  <div class="row content">
+    <div class="col-sm-4">
+    {% set color = colors|random %}
+      <div class="tile {{ color }}">
+          <h3 class="title"><a href={{ item[0].url }}>{{ item[0].name }}</a></h3>
+          <h4>Category: {{ item[0].category.category|title }}</h4>
+          {% if item[0].description %}
+          <p>{{  item[0].description }}</p>
+          {% endif %}
+          <p>Raised ${{  item[0].raised }} of ${{  item[0].goal }}.</p>
+          <p style="visibility: hidden">How now brown cow wowowowowwowowowo these are fun lorem upsoum thoughts I thave!!</p>
+      </div>
+      {% set color = colors|random %}
+      <div class="tile {{ color }}">
+        <h3 class="title"><a href={{ item[1].url }}>{{ item[1].name }}</a></h3>
+        <h4>Category: {{ item[1].category.category|title }}</h4>
+        {% if item[1].description %}
+        <p>{{  item[1].description }}</p>
+         {%  endif %}
+        <p>Raised ${{  item[1].raised }} of ${{  item[1].goal }}.</p>
+      <p style="visibility: hidden">How now brown cow wowowowowwowowowo these are fun lorem upsoum thoughts I thave!!</p>
+      </div>
+    </div>
+{% endfor %}
+  </div>
+</div>

@@ -2,20 +2,10 @@ body {
   font-family: "Open Sans", sans-serif;
   font-size: 14px;
   line-height: 1.5em;
-  background-color: #4CC3D9;
+  font-weight: 400;
+  background-color: white;
   margin: 0;
   padding: 0; }
-
-ul {
-  list-style-type: none;
-  margin: 0; }
-
-ul li h3 {
-  float: right;
-  padding-right: 5px;
-  font-size: 2em;
-  line-height: 90%;
-  text-transform: lowercase; }
 
 p, span, a, ul, li, button {
   font-family: inherit;
@@ -44,30 +34,10 @@ h1 {
 .headline {
   margin-top: 2em;
   text-align: left;
-  color: white;
+  color: #404040;
   padding-left: 20px;
   padding-right: 20px;
-  font-size: 5em;
-  width: 100%;
-  font-weight: 900; }
-
-.headline h1 {
-  margin-top: 1em;
-  font-weight: 700;
-  font-style: italic;
-  font-size: 10em;
-  line-height: 90%;
-  padding-left: 20px; }
-
-.headline h5 {
-  margin-top: 0.5em;
-  font-weight: 900;
-  font-style: normal;
-  font-size: 4em;
-  line-height: 90%;
-  padding-left: 20px;
-  letter-spacing: 2px;
-  margin-bottom: 0; }
+  font-size: 5em; }
 
 @media screen and (max-width: 500px) {
   .headline {
@@ -78,7 +48,9 @@ h1 {
   background: #fff;
   padding: 20px;
   margin-bottom: 30px;
-  display: table-cell; }
+  display: table-cell;
+  border-style: solid;
+  border-color: white; }
   .tile .title {
     margin-top: 0px; }
   .tile.purple, .tile.blue, .tile.red, .tile.orange, .tile.green {
@@ -104,4 +76,4 @@ h1 {
     .tile.orange:hover {
       background: #57b98b; }
 
-/*# sourceMappingURL=main.css.map */
+/*# sourceMappingURL=main.84a97bb666e5.css.map */
