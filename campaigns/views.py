@@ -18,16 +18,18 @@ def example(request):
 def scrape_kickstarter(request):
     scraper = KickstarterScraper
     projects = scraper.find_projects("projects", paginate=True)
-    projects = map(lambda p: Campaign(**p.__dict__), projects)
+    projects = map(lambda p: Campaign(**p.to_dict()), projects)
     Campaign.objects.bulk_create(projects)
     return JsonResponse({'projects': projects}, status=200)
 
 def scrape_gofundme(request):
     scraper = GoFundMeScraper
     projects = scraper.find_projects("projects", paginate=True)
-    projects = map(lambda p: Campaign(**p.__dict__), projects)
-    Campaign.objects.bulk_create(projects)
-    # projects = task_scrape_latest_gofundme.apply()
+
+    if projects:
+        projects = map(lambda p: Campaign(**p.to_dict()), projects)
+        Campaign.objects.bulk_create(projects)
+
     return JsonResponse({'projects': projects}, status=200)
 
 def latest(request):

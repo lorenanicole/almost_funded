@@ -116,12 +116,14 @@ class GoFundMeSerializer(BaseProjectSerializer):
         return None
 
     def set_goal(self):
+        #  TODO: This is broken :'(
         percent_raised = int(self.data.find('span', class_='fill').get('style').strip('width: ').strip('%;'))
         raised = self.data.find('div', class_='details').find('a', class_='amt').get_text().encode('utf-8')
         raised = list(re.findall('\$\d{1,}', raised))[0].strip('$')
         return int(percent_raised * int(raised))
 
     def set_raised(self):
+        # TODO: This is broken :'(
         raised = self.data.find('div', class_='details').find('a', class_='amt').get_text().encode('utf-8')
         return list(re.findall('\$\d{1,}', raised))[0].strip('$')
 
