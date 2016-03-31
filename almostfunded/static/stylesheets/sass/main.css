@@ -1,0 +1,107 @@
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  line-height: 1.5em;
+  background-color: #4CC3D9;
+  margin: 0;
+  padding: 0; }
+
+ul {
+  list-style-type: none;
+  margin: 0; }
+
+ul li h3 {
+  float: right;
+  padding-right: 5px;
+  font-size: 2em;
+  line-height: 90%;
+  text-transform: lowercase; }
+
+p, span, a, ul, li, button {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit; }
+
+strong {
+  font-weight: 600; }
+
+a {
+  color: white; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display", serif;
+  line-height: 1.5em;
+  font-weight: 300; }
+
+strong {
+  font-weight: 400; }
+
+h1 {
+  margin-bottom: 0;
+  padding-bottom: 0; }
+
+.headline {
+  margin-top: 2em;
+  text-align: left;
+  color: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 5em;
+  width: 100%;
+  font-weight: 900; }
+
+.headline h1 {
+  margin-top: 1em;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 10em;
+  line-height: 90%;
+  padding-left: 20px; }
+
+.headline h5 {
+  margin-top: 0.5em;
+  font-weight: 900;
+  font-style: normal;
+  font-size: 4em;
+  line-height: 90%;
+  padding-left: 20px;
+  letter-spacing: 2px;
+  margin-bottom: 0; }
+
+@media screen and (max-width: 500px) {
+  .headline {
+    font-size: 2em; } }
+.tile {
+  width: 49.5%;
+  box-sizing: border-box;
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 30px;
+  display: table-cell; }
+  .tile .title {
+    margin-top: 0px; }
+  .tile.purple, .tile.blue, .tile.red, .tile.orange, .tile.green {
+    color: #fff; }
+  .tile.purple {
+    background: #F16745; }
+    .tile.purple:hover {
+      background: #ed4016; }
+  .tile.red {
+    background: #FFC65D; }
+    .tile.red:hover {
+      background: #ffb42a; }
+  .tile.green {
+    background: #4CC3D9; }
+    .tile.green:hover {
+      background: #2aafc8; }
+  .tile.blue {
+    background: #93648D; }
+    .tile.blue:hover {
+      background: #754f70; }
+  .tile.orange {
+    background: #7BC8A4; }
+    .tile.orange:hover {
+      background: #57b98b; }
+
+/*# sourceMappingURL=main.css.map */
