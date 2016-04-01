@@ -50,10 +50,10 @@ def task_scrape_latest_kickstarter():
     logger.info("Kickstarter scraper - Bulk update")
 
     for project in existing:
-        project.goal = project_data_map[project.url].get('goal')
-        project.last_updated = project_data_map[project.url].get('last_updated')
-        project.deadline = datetime.utcfromtimestamp(project_data_map[project.url].get('deadline'))
-        project.raised = project_data_map[project.url].get('raised')
+        project.goal = project_data_map[project.url].goal
+        project.last_updated = project_data_map[project.url].last_updated
+        project.deadline = datetime.utcfromtimestamp(project_data_map[project.url].deadline)
+        project.raised = project_data_map[project.url].raised
 
     bulk_update(existing)
     print "Saved latest almost funded projects from Kickstarter"
