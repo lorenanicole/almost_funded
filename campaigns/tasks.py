@@ -15,7 +15,7 @@ logger = get_task_logger(__name__)
 
 
 @periodic_task(
-    run_every=(crontab(minute='0', hour='*/3')),
+    run_every=(crontab(minute='25', hour='*')),
     name="task_scrape_latest_kickstarter",
     ignore_result=True
 )

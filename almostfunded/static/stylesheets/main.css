@@ -1,5 +1,4 @@
 body {
-  font-family: "Open Sans", sans-serif;
   font-size: 14px;
   line-height: 1.5em;
   background-color: #4CC3D9;
@@ -21,11 +20,26 @@ ul li h3{
 
 }
 
-p, span, a, ul, li, button {
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  line-height: inherit; }
+.title h4 a{
+    text-transform: uppercase;
+}
+
+.category h4 {
+    letter-spacing: 2px;
+    margin-bottom: 0;
+    margin-top: 0;
+    line-height: 90%;
+}
+
+/*span, a, ul, li, button {*/
+  /*font-family: inherit;*/
+  /*font-size: inherit;*/
+  /*font-weight: inherit;*/
+  /*line-height: inherit; }*/
+
+p {
+      font-family: "Open Sans", sans-serif;
+}
 
 strong {
   font-weight: 600; }
